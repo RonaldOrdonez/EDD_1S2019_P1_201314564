@@ -1,4 +1,4 @@
-class Node:
+class NodeScore:
     def __init__(self, axisX, axisY):
         self.axisX = axisX
         self.axisY = axisY
@@ -10,12 +10,19 @@ class StackScore:
         self.peak = None
     
     #method ADD to add elements to stack
-    def add(self, actualNode):
+    def push(self, actualNode):
         if self.peak is None:
             self.peak = actualNode            
         else:
             actualNode.next = self.peak
             self.peak = actualNode
+    
+    #method to delete a peak of stack 
+    def pop(self):
+        if self.peak is None:
+            print("Stack Empty, Impossible to POP")
+        else:
+            self.peak = self.peak.next        
                     
     #method print to show stack in console
     def printStackScore(self):        
