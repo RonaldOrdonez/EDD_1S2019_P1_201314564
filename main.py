@@ -1,5 +1,16 @@
 from Structures.score import StackScore, NodeScore
 from Structures.scoreboard import QueueScoreBoard, NodeScoreBoard
+from Structures.users import DoublyLinkedListUser, NodeUser
+
+#EXAMPLE OF List of USERS
+print(" ")
+print(" ")
+print("Hello List of Users")
+listUser = DoublyLinkedListUser()
+listUser.add(NodeUser("Ana"))
+listUser.add(NodeUser("Brenda"))
+listUser.add(NodeUser("Carol"))
+listUser.printListUsers()
 
 #EXAMPLE OF STACK OF SCORE
 print(" ")
