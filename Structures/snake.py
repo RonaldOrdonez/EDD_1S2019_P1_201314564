@@ -29,7 +29,17 @@ class ListSnake:
                 temp = temp.next
             temp.next = currentNode
             currentNode.previous = temp
-            currentNode.next = None          
+            currentNode.next = None   
+    
+    #function to delete size of snake, This function delete last position of list
+    def delete(self):
+        if self.head is None:
+            print("Snake list is empty")
+        else:
+            temp = self.head
+            while temp.next.next is not None:
+                temp = temp.next
+            temp.next = None
     
     #function to print all list
     def printSnake(self):
@@ -90,12 +100,18 @@ class ListSnake:
             #subprocess.check_call(['open','LinkedList.png']) 
 
 #TEST            
+"""
 snake = ListSnake()
 snake.add(NodeSnake(1,2))
 snake.add(NodeSnake(1,3))
 snake.add(NodeSnake(1,4))
 snake.add(NodeSnake(1,5))
 snake.printSnake()
+#snake.graphSnake()
+print("**************")
+snake.delete()
+snake.printSnake()
 snake.graphSnake()
+"""
 
    
