@@ -1,0 +1,13 @@
+digraph scoreBoardGraph { 
+node [shape=record]; 
+rankdir = LR; 
+node0 [label=" beny, 14 "]; 
+node0 -> node1; 
+node1 [label=" cecy, 19 "]; 
+node1 -> node2; 
+node2 [label=" dany, 90 "]; 
+node2 -> node3; 
+node3 [label=" helen, 1 "]; 
+node3 -> node4; 
+node4 [label=" Julieta, 50 "]; 
+}

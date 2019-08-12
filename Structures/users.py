@@ -77,12 +77,13 @@ class DoublyLinkedListUser:
             f.write('node{} -> node{}; \n'.format(0,count))                
             f.write('}')                    
             f.close()
-            os.system('dot ReportUsers.dot -Tpng -o users.png')
+            os.system('dot ReportUsers.dot -Tpng -o ReportUsers.png')
+            subprocess.call('ReportUsers.png', shell=True)     # metodo que funciona
             #os.popen('LinkedList.png')                        # para windows
             #subprocess.check_call(['open','LinkedList.png']) 
-            subprocess.call('users.png', shell=True)     # metodo que funciona
+            
 
-"""            
+"""
 #TEST
 print("Hello List of Users")
 listUser = DoublyLinkedListUser()
@@ -96,6 +97,6 @@ listUser.add(NodeUser("Gabriela"))
 listUser.add(NodeUser("Isabel"))
 listUser.printListUsers()
 listUser.graphicUserList()
-"""         
+"""
 
    
