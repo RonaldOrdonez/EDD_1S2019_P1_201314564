@@ -1,3 +1,5 @@
+import os
+import subprocess
 #Definition of class node of User
 class NodeUser:
     #constructor od node user qith name like parameter
@@ -6,7 +8,7 @@ class NodeUser:
         self.next = None
         self.previous = None 
 
-#definition of class User where it is defined methods
+#definition of class User where it is defined methods, DOUBLE LINKED CIRCULAR LIST
 class DoublyLinkedListUser:
 
     #constructor of class
@@ -51,6 +53,49 @@ class DoublyLinkedListUser:
             print("Previous ->", end = "")
             print(aux.previous.name)
             print("")  
-            
+    
+    #function to graphic the list with software Graphiz
+    def graphicUserList(self):
+        if self.head is None:               #verify if our LinkedList is empty
+            print('The list is empty')      #print a warning
+        else:
+            f = open('ReportUsers.dot','w')   #name to save .do
+            f.write('digraph usersGraph { \n')
+            f.write('node [shape=record]; \n')
+            f.write('rankdir = LR; \n')
+            temp = self.head
+            count = 0
+
+            while temp.next is not self.head:                  
+                f.write('node{} [label=\" {} \"]; \n'.format(count,temp.name)) 
+                count +=1
+                f.write('node{} -> node{}; \n'.format(count-1,count))                
+                f.write('node{} -> node{}; \n'.format(count,count-1))                
+                temp = temp.next              
+            f.write('node{} [label=\" {} \"]; \n'.format(count,temp.name)) 
+            f.write('node{} -> node{}; \n'.format(count,0))                
+            f.write('node{} -> node{}; \n'.format(0,count))                
+            f.write('}')                    
+            f.close()
+            os.system('dot ReportUsers.dot -Tpng -o users.png')
+            #os.popen('LinkedList.png')                        # para windows
+            #subprocess.check_call(['open','LinkedList.png']) 
+            subprocess.call('users.png', shell=True)     # metodo que funciona
+
+"""            
+#TEST
+print("Hello List of Users")
+listUser = DoublyLinkedListUser()
+listUser.add(NodeUser("Ana"))
+listUser.add(NodeUser("Brenda"))
+listUser.add(NodeUser("Carol"))
+listUser.add(NodeUser("Daniella"))
+listUser.add(NodeUser("Elena"))
+listUser.add(NodeUser("Fernanda"))
+listUser.add(NodeUser("Gabriela"))
+listUser.add(NodeUser("Isabel"))
+listUser.printListUsers()
+listUser.graphicUserList()
+"""         
 
    
