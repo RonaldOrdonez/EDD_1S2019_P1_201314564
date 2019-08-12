@@ -77,6 +77,9 @@ class QueueScoreBoard:
                 f.write('node{} -> node{}; \n'.format(count-1,count))                                              
                 temp = temp.next              
             f.write('node{} [label=\" {}, {} \"]; \n'.format(count, temp.name, temp.score))
+            count +=1
+            f.write('node{} -> node{}; \n'.format(count-1,count))                                             
+            f.write('node{} [label=\" NULL\"]; \n'.format(count))
             f.write('}')                    
             f.close()
             os.system('dot ReportScoreBoard.dot -Tpng -o ReportScoreBoard.png')
