@@ -21,9 +21,20 @@ def mainMenu(window):
     window.addstr(11,30, '3. User Selection')   #paint option 3
     window.addstr(13,30, '4. Reports')         #paint option 4
     window.addstr(15,30, '5. Bulk Loading')    #paint option 5
-    window.addstr(17,30, '6. Exit')            #paint option 6    
-    window.addstr(19,30, namePlayer)            #paint option 6  
+    window.addstr(17,30, '6. Exit')            #paint option 6        
     window.timeout(-1)                         #wait for an input thru the getch() function
+
+def mainMenu2(window,name):
+    titleOfWindow(window,' MAIN MENU ')          #paint title
+    window.addstr(7,30,  '1. Play')             #paint option 1
+    window.addstr(9,30,  '2. Scoreboard')       #paint option 2
+    window.addstr(11,30, '3. User Selection')   #paint option 3
+    window.addstr(13,30, '4. Reports')         #paint option 4
+    window.addstr(15,30, '5. Bulk Loading')    #paint option 5
+    window.addstr(17,30, '6. Exit')            #paint option 6        
+    window.addstr(19,30, name)            #paint option 6        
+    window.timeout(-1)                         #wait for an input thru the getch() function
+
 
 def titleOfWindow(window,nameTitle):
     window.clear()                         #it's important to clear the screen because of new functionality everytime we call this function
@@ -36,7 +47,8 @@ def waitEsc(window):
     while outKey!=27:
         outKey = window.getch()
 
-def windowUsers(window):     
+def windowUsers(window):   
+    nombreJugador = " "  
     titleOfWindow(window, ' PLAY ')     
     window.addstr(10,12, '<<<====')  
     window.addstr(10,55, '====>>>')
@@ -47,10 +59,9 @@ def windowUsers(window):
     while key == -1 :
 
         key = window.getch()
-
         if key == 10:  #significa que presiono ENTER
-            namePlayer = aux.name            
-            break
+            nombreJugador = aux.name
+            break          
         elif key == KEY_LEFT:
             titleOfWindow(window, ' PLAY ')     
             window.addstr(10,12, '<<<====')  
@@ -68,7 +79,8 @@ def windowUsers(window):
             aux = aux.next
             key = -1                    
         else:
-            key = -1               
+            key = -1   
+    return nombreJugador
 
 #def windowScoreBoard(window):
 
@@ -132,7 +144,23 @@ def windowBulkLoading(window):
         else:
             key=-1
 
-#def windowSnake(window):
+def windowSnake(window):
+    titleOfWindow(window,'SNAKE RELOADED')
+    window.addstr(0,3, 'Player: ') 
+    window.addstr(0,11, namePlayer ) 
+    window.addstr(0,67, 'Score: ') 
+    window.addstr(0,73, '00') 
+
+    
+    
+
+
+
+
+
+#////////////////////////////////////////////////////////////////////////////////////////////////////////
+################################## BEGIN EXECUTION ######################################################
+#////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #creation of main windows
 stdscr = curses.initscr() 
@@ -147,26 +175,28 @@ inputKey = -1
 while(inputKey==-1):
     #get a key entered for keyboard
     inputKey = window.getch()  
-    
+########################################################################3333 
     #option1, 49 is ASCII 1  ->>>>> JUGAR
     if(inputKey==49):         
-        titleOfWindow(window, ' PLAY')
+        windowSnake(window)
         waitEsc(window)
         mainMenu(window)
         inputKey=-1
+###########################################################################
     #option2, 50 is ASCII 2 ----->>>> SCORE BOARD
     elif(inputKey==50):
         titleOfWindow(window, ' SCOREBOARD ')
         waitEsc(window)
         mainMenu(window)
         inputKey=-1
-    
+#************************************************************************************************
     #option3, 51 is ASCII 3 --->> USUARIOS  <<<---------------------finished option
     elif(inputKey==51):
-        windowUsers(window)              
-        mainMenu(window)
+        nombre = windowUsers(window) 
+        namePlayer = nombre             
+        mainMenu2(window,nombre)
         inputKey=-1
-    
+#********************************************************************************************************    
     #option4, 52 is ASCII 4  ----->>>> REPORTS
     elif(inputKey==52):
         windowReport(window)        
