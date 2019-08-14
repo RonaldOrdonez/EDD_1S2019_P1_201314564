@@ -88,7 +88,7 @@ class QueueScoreBoard:
             #subprocess.check_call(['open','LinkedList.png']) 
             
 #TEST
-
+"""
 scoreb = QueueScoreBoard()
 scoreb.queue(NodeScoreBoard("ana",3))
 scoreb.queue(NodeScoreBoard("beny",14))
@@ -98,4 +98,4 @@ scoreb.queue(NodeScoreBoard("helen",1))
 scoreb.queue(NodeScoreBoard("Julieta",50))
 scoreb.printQueueScoreBoard()
 scoreb.graphScoreBoard()
-
+"""

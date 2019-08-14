@@ -1,5 +1,6 @@
 import os
 import subprocess
+import csv
 #Definition of class node of User
 class NodeUser:
     #constructor od node user qith name like parameter
@@ -15,6 +16,9 @@ class DoublyLinkedListUser:
     def __init__(self):
         self.head = None
     
+    def returnHead(self):
+        return self.head
+
     #function to add users to list
     def add(self, currentNode):
         if self.head is None:            
@@ -81,12 +85,26 @@ class DoublyLinkedListUser:
             subprocess.call('ReportUsers.png', shell=True)     # metodo que funciona
             #os.popen('LinkedList.png')                        # para windows
             #subprocess.check_call(['open','LinkedList.png']) 
-            
 
-"""
+           
+
+
 #TEST
+"""
 print("Hello List of Users")
 listUser = DoublyLinkedListUser()
+
+nameFile = input("ingrese nombre de archivo: ")
+archivo = open(nameFile)
+read = csv.DictReader(archivo,delimiter=',')
+for linea in read:
+    listUser.add(NodeUser(linea['nombre']))   
+archivo.close()
+
+listUser.printListUsers()
+listUser.graphicUserList()
+
+
 listUser.add(NodeUser("Ana"))
 listUser.add(NodeUser("Brenda"))
 listUser.add(NodeUser("Carol"))
@@ -95,8 +113,8 @@ listUser.add(NodeUser("Elena"))
 listUser.add(NodeUser("Fernanda"))
 listUser.add(NodeUser("Gabriela"))
 listUser.add(NodeUser("Isabel"))
-listUser.printListUsers()
-listUser.graphicUserList()
 """
+
+
 
    
