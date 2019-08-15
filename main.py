@@ -8,12 +8,6 @@ from Structures.scoreboard import QueueScoreBoard, NodeScoreBoard
 from Structures.users import DoublyLinkedListUser, NodeUser
 from Structures.snake import NodeSnake, ListSnake
 
-#object to work users
-listaUsuarios = DoublyLinkedListUser()
-namePlayer = "Unknown"
-totalScore = 0
-tempScore = 0
-
 def mainMenu(window):
     titleOfWindow(window,' MAIN MENU ')          #paint title
     window.addstr(7,30,  '1. Play')             #paint option 1
@@ -31,8 +25,7 @@ def mainMenu2(window,name):
     window.addstr(11,30, '3. User Selection')   #paint option 3
     window.addstr(13,30, '4. Reports')         #paint option 4
     window.addstr(15,30, '5. Bulk Loading')    #paint option 5
-    window.addstr(17,30, '6. Exit')            #paint option 6        
-    window.addstr(19,30, name)            #paint option 6        
+    window.addstr(17,30, '6. Exit')            #paint option 6                 
     window.timeout(-1)                         #wait for an input thru the getch() function
 
 
@@ -47,6 +40,9 @@ def waitEsc(window):
     while outKey!=27:
         outKey = window.getch()
 
+#**********************************************************************************************************
+#--------------------------------SELECCION DE USUARIOS-----------------------------------------------------
+#**********************************************************************************************************
 def windowUsers(window):   
     nombreJugador = " "  
     titleOfWindow(window, ' PLAY ')     
@@ -82,8 +78,24 @@ def windowUsers(window):
             key = -1   
     return nombreJugador
 
-#def windowScoreBoard(window):
+#**********************************************************************************************************
+#-------------------------------- TABLA DE PUNTAJES--------------------------------------------------------
+#**********************************************************************************************************
+def windowScoreBoard(window):
+    titleOfWindow(window, ' ScoreBoard')    
+    window.addstr(5,25,'Name')
+    window.addstr(5,45,'Score')    
+    size = listscoreboard.sizeQueue
+    temp = listscoreboard.getHead()
 
+    for i in range(0,size):
+        window.addstr(6+i,25,temp.name)
+        window.addstr(6+i,45,str(temp.score))
+        temp = temp.next
+    
+#**********************************************************************************************************
+#--------------------------------SECCION DE REPORTES------------------------------------------------------
+#**********************************************************************************************************
 def windowReport(window):
     titleOfWindow(window, ' REPORTS ')
     window.addstr(7,30,  '1. Snake Report')            
@@ -97,12 +109,15 @@ def windowReport(window):
 
         if(key == 49): #option 1
             #report to snake
+            listsnake.graphSnake()
             key = -1
         elif(key == 50): #option 2
             #report score
+            listScore.graphStack()
             key = -1
         elif(key == 51): #option 3
             #report scoreboard
+            listscoreboard.graphScoreBoard()
             key = -1
         elif (key == 52): #option 4
             listaUsuarios.graphicUserList()
@@ -112,7 +127,9 @@ def windowReport(window):
         else:
             key = -1   
         
-
+#**********************************************************************************************************
+#--------------------------------CARGA MASIVA DE USUARIOS--------------------------------------------------
+#**********************************************************************************************************
 def windowBulkLoading(window):    
     filename = ""
     titleOfWindow(window,'BULK LOADING')
@@ -126,12 +143,12 @@ def windowBulkLoading(window):
         if(key != 10):
             filename=filename+str(chr(key))
             key=-1              
-        elif (key == 10 ):  # 10 is enter in ASCII
-            window.addstr(5,4,filename)
+        elif (key == 10 ):  # 10 is enter in ASCII            
             archivo = open(filename)
             read = csv.DictReader(archivo,delimiter=',')
             for linea in read:
                 listaUsuarios.add(NodeUser(linea['nombre']))
+            window.addstr(5,4,'***File Loaded With Success***')
             archivo.close()
             curses.noecho()                   
             while salir == 0:
@@ -144,6 +161,10 @@ def windowBulkLoading(window):
         else:
             key=-1
 
+#**********************************************************************************************************
+#--------------------------------SECCION DE JUGAR SNAKE----------------------------------------------------
+#**********************************************************************************************************
+
 def windowSnake(window):
     titleOfWindow(window,'SNAKE RELOADED')
     window.addstr(0,3, 'Player: ') 
@@ -151,16 +172,97 @@ def windowSnake(window):
     window.addstr(0,67, 'Score: ') 
     window.addstr(0,73, '00') 
 
-    
-    
+    #INICIO DE VARIABLES
+    key = KEY_RIGHT  # por defecto empieza hacia la derecha
+    puntuacion = 0   # puntucaion inicial 0
+    pos_x=3 
+    pos_y=3
+    posX_food = 0
+    posY_food = 0
+    largoSnake = 8
 
-
-
-
+    #dibuja la cadena de 3 #
+    for i in range(0,largoSnake):    
+        window.addstr(pos_y,pos_x+i,'#')
+    while key != 27:
+        window.timeout(100)    
+        keystroke = window.getch()                
+        if keystroke is not -1: 
+            key = keystroke    
+        if key == KEY_RIGHT:  
+            titleOfWindow(window,'SNAKE RELOADED')
+            window.addstr(0,3, 'Player: ') 
+            window.addstr(0,11, namePlayer ) 
+            window.addstr(0,67, 'Score: ') 
+            window.addstr(0,73, '00')               
+            for i in range(0,largoSnake):
+                window.addch(pos_y, pos_x+i,' ')           
+            pos_x += 1
+            for i in range(0,largoSnake):
+                window.addch(pos_y, pos_x+i,'#')
+        elif key == KEY_LEFT:              
+            titleOfWindow(window,'SNAKE RELOADED')
+            window.addstr(0,3, 'Player: ') 
+            window.addstr(0,11, namePlayer ) 
+            window.addstr(0,67, 'Score: ') 
+            window.addstr(0,73, '00')                
+            for i in range(0,largoSnake):
+                window.addch(pos_y, pos_x-i,' ')           
+            pos_x -= 1
+            for i in range(0,largoSnake):
+                window.addch(pos_y, pos_x-i,'#')       
+        elif key == KEY_UP:   
+            titleOfWindow(window,'SNAKE RELOADED')
+            window.addstr(0,3, 'Player: ') 
+            window.addstr(0,11, namePlayer ) 
+            window.addstr(0,67, 'Score: ') 
+            window.addstr(0,73, '00')                      
+            for i in range(0,largoSnake):
+                window.addch(pos_y-i, pos_x,' ')           
+            pos_y -= 1
+            for i in range(0,largoSnake):
+                window.addch(pos_y-i, pos_x,'#')    
+        elif key == KEY_DOWN:              
+            titleOfWindow(window,'SNAKE RELOADED')
+            window.addstr(0,3, 'Player: ') 
+            window.addstr(0,11, namePlayer ) 
+            window.addstr(0,67, 'Score: ') 
+            window.addstr(0,73, '00')  
+            for i in range(0,largoSnake):
+                window.addch(pos_y+i, pos_x,' ')           
+            pos_y += 1
+            for i in range(0,largoSnake):
+                window.addch(pos_y+i, pos_x,'#')       
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////
 ################################## BEGIN EXECUTION ######################################################
 #////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#object to work users lista doble enlazada circular
+listaUsuarios = DoublyLinkedListUser()
+#object to work Score Board with queue
+listscoreboard = QueueScoreBoard()
+"""
+listscoreboard.queue(NodeScoreBoard("juan",34))
+listscoreboard.queue(NodeScoreBoard("miriam",10))
+listscoreboard.queue(NodeScoreBoard("lucas",90))
+listscoreboard.queue(NodeScoreBoard("maria",4))
+listscoreboard.queue(NodeScoreBoard("gaby",25))
+listscoreboard.queue(NodeScoreBoard("luis",2))
+listscoreboard.queue(NodeScoreBoard("sofia",120))
+listscoreboard.queue(NodeScoreBoard("hanna",10))
+listscoreboard.queue(NodeScoreBoard("mercedes",50))
+listscoreboard.queue(NodeScoreBoard("fernanda",37))
+listscoreboard.queue(NodeScoreBoard("JOSEFA",12))
+"""
+#object to work snake with lista doblemente enlazada
+listsnake = ListSnake()
+#object to work Score with stack
+listScore = StackScore()
+
+namePlayer = "unknown"
+totalScore = 0
+tempScore = 0
 
 #creation of main windows
 stdscr = curses.initscr() 
@@ -177,15 +279,43 @@ while(inputKey==-1):
     inputKey = window.getch()  
 ########################################################################3333 
     #option1, 49 is ASCII 1  ->>>>> JUGAR
-    if(inputKey==49):         
-        windowSnake(window)
-        waitEsc(window)
-        mainMenu(window)
+    if(inputKey==49):        
+        if namePlayer=="unknown":
+            nombre = ""
+            titleOfWindow(window,'REGISTER ERROR')
+            window.addstr(5,20, 'NO Player SELECTION')     
+            window.addstr(7,20, 'ENTER YOUT NAME') 
+            window.addstr(8,20, '') 
+            curses.echo()
+            salir = 0
+            key = -1
+            while key == -1:
+                key = window.getch()       
+                if(key != 10):
+                    nombre=nombre+str(chr(key))
+                    key=-1              
+                elif (key == 10 ):  # 10 is enter in ASCII            
+                    listaUsuarios.add(NodeUser(nombre))
+                    namePlayer = nombre                    
+                    curses.noecho()                   
+                    while salir == 0:
+                        window.addstr(11,20,'PRESS ENTER TO CONTINUE.')
+                        salir = window.getch()
+                        if salir == 10:
+                            windowSnake(window)                                                             
+                        else:
+                            salir = 0
+                else:
+                    key=-1                      
+        else:
+            windowSnake(window)        
+            waitEsc(window)
+        mainMenu(window)         
         inputKey=-1
 ###########################################################################
     #option2, 50 is ASCII 2 ----->>>> SCORE BOARD
     elif(inputKey==50):
-        titleOfWindow(window, ' SCOREBOARD ')
+        windowScoreBoard(window)
         waitEsc(window)
         mainMenu(window)
         inputKey=-1

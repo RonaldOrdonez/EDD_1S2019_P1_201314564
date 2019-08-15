@@ -14,9 +14,13 @@ class QueueScoreBoard:
         self.head = None       
         self.sizeQueue = 0
     
+    #return head
+    def getHead(self):
+        return self.head
+    
     #method to add elements to Queue
     def queue(self, nodeInsert):
-        if self.sizeQueue < 5:          #only accept 10 elements in queue 
+        if self.sizeQueue < 10:          #only accept 10 elements in queue 
             if self.head is None:
                 self.head = nodeInsert
                 self.sizeQueue += 1
